@@ -6,9 +6,14 @@ CREATE DATABASE "giphy_search_favorites";
 -- Category table
 CREATE TABLE "category" (
     "id" SERIAL PRIMARY KEY,
-    "name" VARCHAR (100) NOT NULL
+    "type" VARCHAR (100) NOT NULL
 );
 
--- Default categories. You may change them :)
-INSERT INTO "category" ("name")
-VALUES ('funny'), ('cohort'), ('cartoon'), ('nsfw'), ('meme');
+INSERT INTO "category" ("type")
+VALUES ('funny'), ('animals'), ('nsfw');
+
+CREATE TABLE "favorites" (
+	"id" SERIAL PRIMARY KEY,
+	"link" VARCHAR (255),
+	"category_id" INT REFERENCES "category"
+);
