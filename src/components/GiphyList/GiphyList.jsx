@@ -2,6 +2,7 @@ import axios from 'axios';
 import React from 'react';
 import { useEffect, useState } from 'react'
 import {useDispatch} from 'react-redux';
+import GiphyItem from '../GiphyItem/GiphyItem';
 
 function GiphyList() {
 
@@ -27,7 +28,11 @@ function GiphyList() {
     return (
         <>
                {searchResults.map((picture, i) => {
-                    return (<img width="200px" height="200px" key={i} src={picture.images.original.url} />)
+                    return (
+                    <GiphyItem 
+                        key={i}
+                        picture={picture}
+                    />)
                 })}
             
         </>

@@ -14,10 +14,22 @@ function* getFavorite(){
         let response = yield axios.get('/api/favorite');
         console.log(response.data);
         //dispatch is put only in index 
-        yield put({ type:'ADD_FAVORITE', payload: response.data });
+        yield put({ type:'SET_FAVORITE', payload: response.data });
     } catch (err) {
         console.log(err);
     }
+}
+
+//post
+function* addFavorite (action) {
+    console.log(action.payload);
+    try {
+        yield axios.post('/api/favorite', {link: action.payload})
+        // GET HERE
+    } catch (err) {
+        console.log(err);
+    }
+    
 }
 
 //saga middleware
@@ -26,18 +38,19 @@ const sagaMiddleware = createSagaMiddleware();
 //rootSaga
 function* rootSaga(){
     yield takeEvery('GET_FAVORITE', getFavorite);
+    yield takeEvery('ADD_FAVORITE', addFavorite);
 }
 
 //reducer 
 const favoriteReducer = (state = [], action) => {
     switch (action.type) {
-      case 'ADD_FAVORITE':
+      case 'SET_FAVORITE':
         return action.payload
       default:
         return state;
     }
   };
-
+   
 //store
 const store = createStore(
     combineReducers({
