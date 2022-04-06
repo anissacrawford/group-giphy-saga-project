@@ -1,5 +1,6 @@
 import React from 'react';
 import GiphyList from '../GiphyList/GiphyList';
+import FavoriteList from '../FavoriteList/FavoriteList';
 
 function App(props) {
 
@@ -27,6 +28,7 @@ function App(props) {
     <div>
       <h1>Giphy Search!</h1>
       <GiphyList/>
+      <FavoriteList/>
     </div>
   );
 }
