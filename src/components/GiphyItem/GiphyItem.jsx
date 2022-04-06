@@ -1,7 +1,12 @@
+import {useDispatch} from 'react-redux';
+
 function GiphyItem ({picture}) {
 
+    const dispatch = useDispatch();
+
     const favoriteGif = () => {
-        console.log('Favoriting', picture.id);
+        console.log('Favoriting', picture.images.original.url);
+        dispatch({type: 'ADD_FAVORITE', payload: picture.images.original.url})
     }
 
     return(
