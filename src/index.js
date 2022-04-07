@@ -32,6 +32,18 @@ function* addFavorite (action) {
     
 }
 
+//put 
+function* putCategory (action) {
+    const addCategory = action.payload
+    console.log(action.payload);
+    try {
+        yield axios.put(`/api/favorite/${addCategory.id}`, {category: addCategory.category_id})
+        // GET HERE
+    } catch (err) {
+        console.log(err);
+    }
+}
+
 //saga middleware
 const sagaMiddleware = createSagaMiddleware(); 
 
@@ -39,6 +51,7 @@ const sagaMiddleware = createSagaMiddleware();
 function* rootSaga(){
     yield takeEvery('GET_FAVORITE', getFavorite);
     yield takeEvery('ADD_FAVORITE', addFavorite);
+    yield takeEvery('PUT_CATEGORY', putCategory);
 }
 
 //reducer 
@@ -50,11 +63,21 @@ const favoriteReducer = (state = [], action) => {
         return state;
     }
   };
-   
+
+  const categoryReducer = (state = 0, action) => {
+    switch (action.type) {
+      case 'PUT_CATEGORY':
+        return action.payload
+      default:
+        return state;
+    }
+  };
+
 //store
 const store = createStore(
     combineReducers({
-        favoriteReducer
+        favoriteReducer,
+        categoryReducer
     }),
     applyMiddleware(sagaMiddleware, logger)
 );
