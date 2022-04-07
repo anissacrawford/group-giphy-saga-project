@@ -38,7 +38,7 @@ function* putCategory (action) {
     console.log(action.payload);
     try {
         yield axios.put(`/api/favorite/${addCategory.id}`, {category: addCategory.category_id})
-        // GET HERE
+        yield put({ type: 'GET_FAVORITE'})
     } catch (err) {
         console.log(err);
     }
