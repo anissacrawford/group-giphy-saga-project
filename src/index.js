@@ -8,7 +8,8 @@ import createSagaMiddleware from 'redux-saga';
 import {takeEvery, put} from 'redux-saga/effects';
 import axios from 'axios';
 
-//get
+
+//get favorites
 function* getFavorite(){
     try { 
         let response = yield axios.get('/api/favorite');
@@ -20,12 +21,12 @@ function* getFavorite(){
     }
 }
 
-//post
+//post new favorite
 function* addFavorite (action) {
     console.log(action.payload);
     try {
         yield axios.post('/api/favorite', {link: action.payload})
-        // GET HERE
+        yield put({type: 'GET_FAVORITE'})
     } catch (err) {
         console.log(err);
     }
@@ -44,17 +45,39 @@ function* putCategory (action) {
     }
 }
 
+//post user search query
+function* setSearchQuery (action) {
+    try {
+       let response = yield axios.post('/api/giphy', {searchQuery: action.payload})
+        console.log(response.data.data);
+        yield put({type: 'SET_GIPHY', payload: response.data.data})
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+function* getGiphy () {
+    try {
+       let response = yield axios.get('/api/giphy')
+        yield put({type: 'SET_GIPHY', payload: response.data.data})
+    } catch (err) {
+        console.log(err);
+    }
+}
+
 //saga middleware
 const sagaMiddleware = createSagaMiddleware(); 
 
 //rootSaga
 function* rootSaga(){
+    yield takeEvery('GET_GIPHY', getGiphy);
     yield takeEvery('GET_FAVORITE', getFavorite);
     yield takeEvery('ADD_FAVORITE', addFavorite);
     yield takeEvery('PUT_CATEGORY', putCategory);
+    yield takeEvery('SET_SEARCH', setSearchQuery);
 }
 
-//reducer 
+// new favorite reducer 
 const favoriteReducer = (state = [], action) => {
     switch (action.type) {
       case 'SET_FAVORITE':
@@ -73,11 +96,23 @@ const favoriteReducer = (state = [], action) => {
     }
   };
 
+  //giphy reducer
+  const giphyReducer = (state = [], action) => {
+      switch(action.type) {
+          case 'SET_GIPHY':
+              state = action.payload;
+              return state;
+        default:
+            return state
+      }
+  }
+   
 //store
 const store = createStore(
     combineReducers({
         favoriteReducer,
-        categoryReducer
+        categoryReducer,
+        giphyReducer
     }),
     applyMiddleware(sagaMiddleware, logger)
 );
