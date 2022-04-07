@@ -8,6 +8,7 @@ function GiphyForm () {
     const dispatch = useDispatch();
 
     const submitSearchQuery = () => {
+        event.preventDefault();
         dispatch({type: 'SET_SEARCH', payload: searchQuery})
     }
 
