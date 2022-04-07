@@ -48,9 +48,9 @@ function* putCategory (action) {
 //post user search query
 function* setSearchQuery (action) {
     try {
-       let response = yield axios.post('/api/giphy', {searchQuery: action.payload})
-        console.log(response.data.data);
-        yield put({type: 'SET_GIPHY', payload: response.data.data})
+        yield axios.post('/api/giphy', {searchQuery: action.payload})
+        // console.log(response.data);
+        yield put ({type: 'GET_GIPHY'})
     } catch (err) {
         console.log(err);
     }
@@ -100,10 +100,9 @@ const favoriteReducer = (state = [], action) => {
   const giphyReducer = (state = [], action) => {
       switch(action.type) {
           case 'SET_GIPHY':
-              state = action.payload;
-              return state;
+              return action.payload;
         default:
-            return state
+            return state;
       }
   }
    
