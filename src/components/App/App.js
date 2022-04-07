@@ -1,8 +1,9 @@
 import React from 'react';
 import GiphyList from '../GiphyList/GiphyList';
 import FavoriteList from '../FavoriteList/FavoriteList';
+import GiphyForm from '../GiphyForm/GiphyForm';
 
-function App(props) {
+function App() {
 
   // const dispatch = useDispatch();
 
@@ -27,6 +28,7 @@ function App(props) {
   return (
     <div>
       <h1>Giphy Search!</h1>
+      <GiphyForm/>
       <GiphyList/>
       <FavoriteList/>
     </div>
