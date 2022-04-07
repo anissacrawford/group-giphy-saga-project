@@ -33,6 +33,18 @@ function* addFavorite (action) {
     
 }
 
+//put 
+function* putCategory (action) {
+    const addCategory = action.payload
+    console.log(action.payload);
+    try {
+        yield axios.put(`/api/favorite/${addCategory.id}`, {category: addCategory.category_id})
+        yield put({ type: 'GET_FAVORITE'})
+    } catch (err) {
+        console.log(err);
+    }
+}
+
 //post user search query
 function* setSearchQuery (action) {
     try {
@@ -61,6 +73,7 @@ function* rootSaga(){
     yield takeEvery('GET_GIPHY', getGiphy);
     yield takeEvery('GET_FAVORITE', getFavorite);
     yield takeEvery('ADD_FAVORITE', addFavorite);
+    yield takeEvery('PUT_CATEGORY', putCategory);
     yield takeEvery('SET_SEARCH', setSearchQuery);
 }
 
@@ -68,6 +81,15 @@ function* rootSaga(){
 const favoriteReducer = (state = [], action) => {
     switch (action.type) {
       case 'SET_FAVORITE':
+        return action.payload
+      default:
+        return state;
+    }
+  };
+
+  const categoryReducer = (state = 0, action) => {
+    switch (action.type) {
+      case 'PUT_CATEGORY':
         return action.payload
       default:
         return state;
@@ -89,6 +111,7 @@ const favoriteReducer = (state = [], action) => {
 const store = createStore(
     combineReducers({
         favoriteReducer,
+        categoryReducer,
         giphyReducer
     }),
     applyMiddleware(sagaMiddleware, logger)
